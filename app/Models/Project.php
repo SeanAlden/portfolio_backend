@@ -14,4 +14,9 @@ class Project extends Model
         'tech' => 'array',
         'github_urls' => 'array',
     ];
+
+    public function education()
+    {
+        return $this->belongsTo(Education::class);
+    }
 }
