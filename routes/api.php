@@ -27,6 +27,13 @@ Route::middleware('auth:sanctum')->group(function () {
 // Public Route (Bisa diakses dari form Next.js tanpa login)
 Route::post('/contact', [ContactController::class, 'store']);
 
+Route::get('/educations', [EducationController::class, 'index']);
+Route::get('/skill-categories', [SkillCategoryController::class, 'index']);
+Route::get('/skills', [SkillController::class, 'index']);
+Route::get('/experiences', [ExperienceController::class, 'index']);
+Route::get('/organizations', [OrganizationController::class, 'index']);
+Route::get('/projects', [ProjectController::class, 'index']);
+
 // Protected Admin Routes (Harus membawa Bearer Token)
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/contacts', [ContactController::class, 'index']); // History semua pesan
