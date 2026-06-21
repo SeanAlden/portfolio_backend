@@ -19,6 +19,17 @@ Route::get('/user', function (Request $request) {
 // Public Route untuk login Admin
 Route::post('/login', [AuthController::class, 'login']);
 
+// Tambahkan ini di area Public Route
+Route::get('/profile', function () {
+    // Karena ini portofolio tunggal, kita cukup mengambil data user pertama
+    $user = \App\Models\User::first();
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $user
+    ]);
+});
+
 // Protected Route (Hanya bisa diakses jika membawa Bearer Token yang valid)
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
