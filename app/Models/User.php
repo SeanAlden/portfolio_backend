@@ -12,9 +12,9 @@ use Laravel\Sanctum\HasApiTokens; // 1. Tambahkan import ini di atas
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    
+
     // 2. Tambahkan HasApiTokens di dalam trait "use"
-    use HasApiTokens, HasFactory, Notifiable; 
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +25,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'image',
+        'description',
     ];
+
+    // Tambahkan properti ini agar image_url selalu ikut terkirim saat fetch User
+    protected $appends = ['image_url'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -48,5 +54,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Accessor untuk S3 URL
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? \Illuminate\Support\Facades\Storage::disk('s3')->url($this->image) : null;
     }
 }

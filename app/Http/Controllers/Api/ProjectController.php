@@ -25,7 +25,7 @@ class ProjectController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $projects = $this->projectService->getAllProjects();
-        
+
         return ProjectResource::collection($projects);
     }
 

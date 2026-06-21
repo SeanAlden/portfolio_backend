@@ -46,4 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/admin/personal-infos', PersonalInfoController::class);
     Route::apiResource('/admin/organizations', OrganizationController::class);
     Route::apiResource('/admin/projects', ProjectController::class);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+    // Tambahkan baris ini:
+    Route::post('/user/update', [AuthController::class, 'updateProfile']);
 });

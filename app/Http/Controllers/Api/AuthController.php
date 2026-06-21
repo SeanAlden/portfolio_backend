@@ -54,4 +54,40 @@ class AuthController extends Controller
             'message' => 'Berhasil logout, session token dicabut.'
         ], Response::HTTP_OK);
     }
+
+    /**
+     * Endpoint Update Profile Admin
+     */
+    public function updateProfile(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'role' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'image' => ['nullable', 'image', 'max:2048'], // Maks 2MB
+        ]);
+
+        // Proses upload gambar ke S3 jika ada
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($user->image) {
+                \Illuminate\Support\Facades\Storage::disk('s3')->delete($user->image);
+            }
+            // Simpan gambar baru
+            $path = $request->file('image')->store('users', 's3');
+            \Illuminate\Support\Facades\Storage::disk('s3')->setVisibility($path, 'public');
+            $validated['image'] = $path;
+        }
+
+        // Update data user
+        $user->update($validated);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Profil berhasil diperbarui.',
+            'data' => $user
+        ], Response::HTTP_OK);
+    }
 }
